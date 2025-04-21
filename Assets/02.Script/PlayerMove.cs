@@ -23,7 +23,7 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        Player.Instance.Stemnia = Player.Instance.SteminaMax;
+        Player.Instance.Stemnia = PlayerSO.SteminaMax;
     }
 
     // Update is called once per frame
@@ -53,7 +53,7 @@ public class PlayerMove : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
         dir.y = _yVelocity;
 
-        SteminaSlider.value = Player.Instance.Stemnia / Player.Instance.SteminaMax;
+        SteminaSlider.value = Player.Instance.Stemnia / PlayerSO.SteminaMax;
 
         _characterController.Move( dir * _speed * Time.deltaTime);
     }
@@ -72,7 +72,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         _characterController.Move(_sprintDir * PlayerSO.SprintSpeed * Time.deltaTime);
-        SteminaSlider.value = Player.Instance.Stemnia / Player.Instance.SteminaMax;
+        SteminaSlider.value = Player.Instance.Stemnia / PlayerSO.SteminaMax;
     }
     private void Jump()
     {
@@ -98,7 +98,7 @@ public class PlayerMove : MonoBehaviour
         else
         {
             _speed = PlayerSO.WalkSpeed;
-            if (Player.Instance.Stemnia < Player.Instance.SteminaMax && Time.time > _exhaustion)
+            if (Player.Instance.Stemnia < PlayerSO.SteminaMax && Time.time > _exhaustion)
             {
                 Player.Instance.Stemnia += Time.deltaTime;
             }
@@ -116,7 +116,7 @@ public class PlayerMove : MonoBehaviour
         dir = Camera.main.transform.TransformDirection(dir);
         _characterController.Move(dir * PlayerSO.ClimbSpeed * Time.deltaTime);
         Player.Instance.Stemnia -= 0.5f * Time.deltaTime;
-        SteminaSlider.value = Player.Instance.Stemnia / Player.Instance.SteminaMax;
+        SteminaSlider.value = Player.Instance.Stemnia / PlayerSO.SteminaMax;
 
         if (Player.Instance.Stemnia <= 0 && Time.time > _exhaustion)
         {

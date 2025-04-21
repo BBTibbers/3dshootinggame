@@ -10,4 +10,5 @@ public class PlayerSO : ScriptableObject
     public float JumpPower = 2f;
     public int JumpCount = 2; // 점프 횟수
     public float DashTime = 0.2f; // 대시 시간
+    public float SteminaMax = 10f;
 }
