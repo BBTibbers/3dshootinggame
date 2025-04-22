@@ -1,0 +1,47 @@
+﻿using NUnit.Framework;
+using UnityEngine;
+using System.Collections.Generic;
+
+public class BombPool : MonoBehaviour
+{
+    public static BombPool Instance; // 싱글톤 인스턴스
+
+    [SerializeField] private GameObject _bombPrefab; // 폭탄 프리팹
+    [SerializeField] private int PoolSize = 3;
+    private List<GameObject> _bombPool;
+
+    private void Awake()
+    {
+        Instance = this;
+        _bombPool = new List<GameObject>();
+        for (int i = 0; i < PoolSize; i++)
+        {
+            GameObject bomb = Instantiate(_bombPrefab,this.transform);
+            bomb.SetActive(false);
+            _bombPool.Add(bomb);
+        }
+    }
+
+    public GameObject GetBomb()
+    {
+        foreach (var bomb in _bombPool)
+        {
+            if (!bomb.activeSelf)
+            {
+                bomb.SetActive(true);
+                return bomb;
+            }
+        }
+        // 풀에 사용 가능한 폭탄이 없으면 새로 생성
+        GameObject newBomb = Instantiate(_bombPrefab);
+        newBomb.SetActive(true);
+        _bombPool.Add(newBomb);
+        return newBomb;
+    }
+
+    public void ReturnBomb(GameObject bomb)
+    {
+        bomb.SetActive(false);
+    }
+
+}
