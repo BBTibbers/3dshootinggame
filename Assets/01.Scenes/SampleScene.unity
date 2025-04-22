@@ -1462,7 +1462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41799a53e791dff4394345589deb7b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 2270751391702270301, guid: c40b3b435d44d8d4b889dfa0a7722002, type: 3}
+  _bombPrefab: {fileID: 2270751391702270301, guid: c40b3b435d44d8d4b889dfa0a7722002, type: 3}
   PoolSize: 3
 --- !u!4 &1036898632
 Transform:
@@ -2060,9 +2060,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bc0abcf45554242bd82923ec6d218c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BombText: {fileID: 1596793788}
-  BulltetCountText: {fileID: 1336206684}
-  BombChargeSlider: {fileID: 1392261815}
+  _bombText: {fileID: 1596793788}
+  _bulltetCountText: {fileID: 1336206684}
+  _bombChargeSlider: {fileID: 1392261815}
+  _steminaSlider: {fileID: 1492889899}
 --- !u!4 &1429119607
 Transform:
   m_ObjectHideFlags: 0
@@ -2520,10 +2521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7098c698fcd3bf49866879b35cd9543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsClimbing: 0
   ClimbCollider: {fileID: 267702636}
-  SteminaSlider: {fileID: 1492889899}
   PlayerSO: {fileID: 11400000, guid: d3ee6acea349e5140b250eb7ec3ea024, type: 2}
+  IsClimbing: 0
 --- !u!143 &1868737518
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2562,6 +2562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Stemina: 0
+  PlayerSO: {fileID: 11400000, guid: d3ee6acea349e5140b250eb7ec3ea024, type: 2}
 --- !u!114 &1868737521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2574,12 +2575,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd59bc6f42017894fb518833f9efe296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam1: {fileID: 330585543}
-  cam2: {fileID: 134436208}
-  rotationSpeed: 1250
-  recoilY: 2
   fixRecoilTime: 2
   maxRecoil: 15
+  _rotationSpeed: 1250
+  _recoilY: 1
+  Cam1: {fileID: 330585543}
+  Cam2: {fileID: 134436208}
 --- !u!114 &1868737522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2592,18 +2593,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0099b465e0b3ea94e8758d145b429ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _throwPower: 15
+  _bombCount: 3
+  _maxBombCount: 3
+  _maxChargeTime: 3
+  _fireCooltime: 0.05
+  _maxBullets: 50
+  _reloadingTime: 2
   FirePosition: {fileID: 577884527}
   BombPrefab: {fileID: 2270751391702270301, guid: c40b3b435d44d8d4b889dfa0a7722002, type: 3}
   Player: {fileID: 1868737512}
-  ThrowPower: 15
   BulletEffect: {fileID: 100002, guid: 54dd9cb5740188a488b8baebbf19207c, type: 3}
-  BombCount: 3
-  MaxBombCount: 3
-  MaxChargeTime: 3
-  BombPool: {fileID: 0}
-  fireCooltime: 0.03
-  maxBullets: 50
-  reloadingTime: 2
 --- !u!1 &1946561407
 GameObject:
   m_ObjectHideFlags: 0
