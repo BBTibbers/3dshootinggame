@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "3dshootinggame.sln"
+    "dotnet.defaultSolution": "3dshootinggame.sln",
+    "dotnet.preferCSharpExtension": true
 }

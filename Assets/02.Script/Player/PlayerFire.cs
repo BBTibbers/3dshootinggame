@@ -21,7 +21,7 @@ public class PlayerFire : MonoBehaviour
     public GameObject BulletEffect;
     public GameObject FireEffect;
     public Action<int, int> BombCountChange;
-    public Action <int, int> BulletCountChange;
+    public Action<int, int> BulletCountChange;
     public Action OneShot;
     private bool _bombCharging = false;
     private float _chargeTime;
@@ -40,7 +40,7 @@ public class PlayerFire : MonoBehaviour
     {
         ThrowBomb();
         Fire();
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             _reloading = true;
         }
@@ -49,7 +49,7 @@ public class PlayerFire : MonoBehaviour
 
     private void Fire()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
             _reloading = false;
         if (Input.GetMouseButton(0))
         {
@@ -60,9 +60,9 @@ public class PlayerFire : MonoBehaviour
                 _reloading = true;
                 return;
             }
-            if(_reloading)
+            if (_reloading)
                 return;
-            
+
             _remainBullets--;
             BulletCountChange?.Invoke(_remainBullets, _maxBullets);
             _nextFire = Time.time + _fireCooltime;
@@ -80,33 +80,46 @@ public class PlayerFire : MonoBehaviour
                 vfx.GetComponent<ParticleSystem>().Play();
                 StartCoroutine(ShowTracer(FirePosition.transform.position, hitInfo.point));
                 Destroy(vfx, 2f);
+
+                if (hitInfo.collider.CompareTag("Enemy"))
+                {
+                    Debug.Log("Hit Enemy");
+                    Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
+                    if (enemy != null)
+                    {
+                        Damage damage = new Damage();
+                        damage.Value = 10;
+                        damage.From = this.gameObject;
+                        damage.Type = DamageType.Bullet;
+                        enemy.TakeDamage(damage);
+                    }
+                }
             }
             OneShot?.Invoke();
 
         }
     }
     IEnumerator ShowTracer(Vector3 start, Vector3 end)
-{
-    tracerLine.positionCount = 2; // 꼭 먼저 설정해줘야 함
-    tracerLine.SetPosition(0, start);
-    tracerLine.SetPosition(1, end);
-    tracerLine.gameObject.SetActive(true);
-    Debug.Log(tracerLine.gameObject.activeSelf);
-    yield return new WaitForSeconds(tracerDuration);
+    {
+        tracerLine.positionCount = 2; // 꼭 먼저 설정해줘야 함
+        tracerLine.SetPosition(0, start);
+        tracerLine.SetPosition(1, end);
+        tracerLine.gameObject.SetActive(true);
+        yield return new WaitForSeconds(tracerDuration);
 
-    tracerLine.gameObject.SetActive(false);
-}
+        tracerLine.gameObject.SetActive(false);
+    }
 
     private void ReLoad()
     {
         if (!_reloading)
             return;
-        if(_remainBullets == _maxBullets)
+        if (_remainBullets == _maxBullets)
         {
             _reloading = false;
             return;
         }
-        if(_nextReloadingTime>Time.time)
+        if (_nextReloadingTime > Time.time)
         {
             return;
         }
