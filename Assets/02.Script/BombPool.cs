@@ -9,6 +9,7 @@ public class BombPool : MonoBehaviour
     [SerializeField] private GameObject _bombPrefab; // 폭탄 프리팹
     [SerializeField] private int PoolSize = 3;
     private List<GameObject> _bombPool;
+    public GameObject Player; // 플레이어 오브젝트
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class BombPool : MonoBehaviour
             if (!bomb.activeSelf)
             {
                 bomb.SetActive(true);
+                Physics.IgnoreCollision(bomb.GetComponent<Collider>(), Player.GetComponent<Collider>());
                 return bomb;
             }
         }
@@ -41,6 +43,9 @@ public class BombPool : MonoBehaviour
 
     public void ReturnBomb(GameObject bomb)
     {
+        Rigidbody rb = bomb.GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         bomb.SetActive(false);
     }
 

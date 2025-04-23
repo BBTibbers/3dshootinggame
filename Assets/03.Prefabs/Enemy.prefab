@@ -131,7 +131,7 @@ MonoBehaviour:
   MinDistance: 0.1
   Health: 500
   MaxHealth: 500
-  BulletKnockBackSpeed: 2
+  BulletKnockBackSpeed: 3
   BombKnockBackSpeed: 50
   _damagedTime: 0.3
   _deathTime: 2

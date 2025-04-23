@@ -147,14 +147,20 @@ public class PlayerFire : MonoBehaviour
             _bombCount--;
             BombCountChange?.Invoke(_bombCount, _maxBombCount);
             GameObject bomb = BombPool.Instance.GetBomb();
-            bomb.transform.position = FirePosition.transform.position;
+            bomb.transform.position = Player.transform.position;
 
             Rigidbody bombRIgidbody = bomb.GetComponent<Rigidbody>();
             float charged = Mathf.Min(Time.time - _chargeTime, _maxChargeTime);
-            bombRIgidbody.AddForce(Player.transform.forward * _throwPower * charged, ForceMode.Impulse);
+            bombRIgidbody.AddForce(Player.transform.forward.normalized * _throwPower * charged, ForceMode.Impulse);
             bombRIgidbody.AddTorque(Vector3.one);
 
             _bombCharging = false;
         }
     }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(Player.transform.position, Player.transform.forward * 5f);
+    }
+
 }

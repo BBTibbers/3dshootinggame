@@ -38,7 +38,7 @@ public class EnemyGenerator : MonoBehaviour
         GameObject enemy = GetEnemy();
         if (enemy != null)
         {
-            int patrolIndex =  Random.Range(0, Spawners.Count);
+            int patrolIndex =  0;
             enemy.GetComponent<Enemy>().patrolIndex = patrolIndex;
             CurrentSpawner = Spawners[patrolIndex];
             enemy.GetComponent<Enemy>().Initialize();
