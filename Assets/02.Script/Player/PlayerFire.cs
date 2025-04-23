@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.VFX;
 
 public class PlayerFire : MonoBehaviour
 {
@@ -12,10 +13,13 @@ public class PlayerFire : MonoBehaviour
     [SerializeField] private float _fireCooltime = 0.1f;
     [SerializeField] private int _maxBullets = 50;
     [SerializeField] private float _reloadingTime = 2f;
+    [SerializeField] private LineRenderer tracerLine;
+    [SerializeField] private float tracerDuration = 0.01f;
     public GameObject FirePosition;
     public GameObject BombPrefab;
     public GameObject Player;
     public GameObject BulletEffect;
+    public GameObject FireEffect;
     public Action<int, int> BombCountChange;
     public Action <int, int> BulletCountChange;
     public Action OneShot;
@@ -62,6 +66,10 @@ public class PlayerFire : MonoBehaviour
             _remainBullets--;
             BulletCountChange?.Invoke(_remainBullets, _maxBullets);
             _nextFire = Time.time + _fireCooltime;
+            //GameObject fireVFX = Instantiate(FireEffect);
+            //fireVFX.transform.position = FirePosition.transform.position;
+            //fireVFX.GetComponent<ParticleSystem>().Play();
+            //Destroy(fireVFX,_fireCooltime);
             Ray ray = new Ray(Player.transform.position, Player.transform.forward);
             RaycastHit hitInfo = new RaycastHit();
             bool isHit = Physics.Raycast(ray, out hitInfo);
@@ -70,12 +78,24 @@ public class PlayerFire : MonoBehaviour
                 GameObject vfx = Instantiate(BulletEffect);
                 vfx.transform.position = hitInfo.point;
                 vfx.GetComponent<ParticleSystem>().Play();
+                StartCoroutine(ShowTracer(FirePosition.transform.position, hitInfo.point));
                 Destroy(vfx, 2f);
             }
             OneShot?.Invoke();
 
         }
     }
+    IEnumerator ShowTracer(Vector3 start, Vector3 end)
+{
+    tracerLine.positionCount = 2; // 꼭 먼저 설정해줘야 함
+    tracerLine.SetPosition(0, start);
+    tracerLine.SetPosition(1, end);
+    tracerLine.gameObject.SetActive(true);
+    Debug.Log(tracerLine.gameObject.activeSelf);
+    yield return new WaitForSeconds(tracerDuration);
+
+    tracerLine.gameObject.SetActive(false);
+}
 
     private void ReLoad()
     {
