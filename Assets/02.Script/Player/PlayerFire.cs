@@ -139,11 +139,11 @@ public class PlayerFire : MonoBehaviour
             }
             _bombCharging = true;
             _chargeTime = Time.time;
-            UIManager.Instance.BombChargeShow(_maxChargeTime);
+            PlayerUI.Instance.BombChargeShow(_maxChargeTime);
         }
         if (Input.GetMouseButtonUp(1) && _bombCharging)
         {
-            UIManager.Instance.BombChargeHide();
+            PlayerUI.Instance.BombChargeHide();
             _bombCount--;
             BombCountChange?.Invoke(_bombCount, _maxBombCount);
             GameObject bomb = BombPool.Instance.GetBomb();

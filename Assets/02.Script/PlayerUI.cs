@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using System.Collections;
 using Unity.VisualScripting;
 
-public class UIManager : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static PlayerUI Instance;
 
     [SerializeField] private TextMeshProUGUI _bombText;
     [SerializeField] private TextMeshProUGUI _bulltetCountText;

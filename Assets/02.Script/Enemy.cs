@@ -17,26 +17,26 @@ public enum EnemyState
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private float _damagedTime = 0.3f;
+    [SerializeField] private float _deathTime = 2f;
+    [SerializeField] private float _patrolCoolTime = 3f;
     public EnemyState CurrentState = EnemyState.Idle;
-    private GameObject _player;
-    private CharacterController _characterController;
     public float MoveSpeed = 5f;
     public float FindDistance = 10f;
     public float AttackDistance = 2f;
     public float MinDistance = 0.2f;
-    public int Health = 100;
-    public int MaxHealth = 100;
-    private float _attackCoolTime = 1f;
-    private float _attackTimer = 0f;
     public float BulletKnockBackSpeed = 1f;
     public float BombKnockBackSpeed = 10f;
-    private float _knockBackSpeed;
-    [SerializeField] private float _damagedTime = 0.3f;
-    [SerializeField] private float _deathTime = 2f;
-    [SerializeField] float _patrolCoolTime = 3f;
-    private Coroutine _idleCoroutine = null;
-    public GameObject CurrentPatrol;
+    public int Health = 100;
+    public int MaxHealth = 100;
     public int patrolIndex = 0;
+    public GameObject CurrentPatrol;
+    private float _attackCoolTime = 1f;
+    private float _attackTimer = 0f;
+    private float _knockBackSpeed;
+    private GameObject _player;
+    private CharacterController _characterController;
+    private Coroutine _idleCoroutine = null;
 
     private void Start()
     {
@@ -121,7 +121,7 @@ public class Enemy : MonoBehaviour
         CurrentState = EnemyState.Damaged;
         StartCoroutine(Damaged_Coroutine());
     }
-    public IEnumerator Damaged_Coroutine()
+    private IEnumerator Damaged_Coroutine()
     {
         yield return new WaitForSeconds(_damagedTime);
         Debug.Log("상태전환: Damaged -> Trace");
@@ -158,7 +158,7 @@ public class Enemy : MonoBehaviour
         ChangePatrol();
         _idleCoroutine = null;
     }
-    public void ChangePatrol()
+    private void ChangePatrol()
     {
         patrolIndex = (patrolIndex + 1) % EnemyGenerator.Instance.Spawners.Count;
         CurrentPatrol = EnemyGenerator.Instance.Spawners[patrolIndex];

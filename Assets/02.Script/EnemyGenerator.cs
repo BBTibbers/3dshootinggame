@@ -5,12 +5,13 @@ using System.Collections;
 public class EnemyGenerator : MonoBehaviour
 {
     public static EnemyGenerator Instance; // 싱글톤 인스턴스
+
     [SerializeField] GameObject _enemyPrefab;
     [SerializeField] int PoolSize = 3;
     private List<GameObject> _enemyPool;
-    public GameObject CurrentSpawner;
-    public List<GameObject> Spawners = new List<GameObject>();
     private Coroutine _isGenerating;
+    public List<GameObject> Spawners = new List<GameObject>();
+    public GameObject CurrentSpawner;
     private void Awake()
     {
         Instance = this;
