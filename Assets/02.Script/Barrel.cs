@@ -9,6 +9,7 @@ public class Barrel : MonoBehaviour
     [SerializeField] private float _explsionPositionPreset = 3;
     [SerializeField] private float _explosionTouque = 10f; // 폭발 회전
     [SerializeField] private GameObject _vfx;
+    private bool _isExploded = false; // 폭발 여부 
     public int Health = 200;
 
     public void TakeDamage(Damage damage)
@@ -20,6 +21,9 @@ public class Barrel : MonoBehaviour
     }
     private void Explosion()
     {
+        if(_isExploded)
+            return;
+        _isExploded = true; // 폭발 상태로 변경
         // 폭발 효과를 나타내는 VFX
         GameObject vfx = Instantiate(_vfx);
         vfx.transform.position = transform.position;
@@ -70,7 +74,7 @@ public class Barrel : MonoBehaviour
             }
             if(col.CompareTag("Player"))
             {
-                Debug.Log("Barrel Hit Player");
+                Debug.Log(col.name);
                 Player player = col.GetComponent<Player>();
                 if (player != null)
                 {
@@ -81,6 +85,21 @@ public class Barrel : MonoBehaviour
                         Type = DamageType.Bomb
                     };
                     player.TakeDamage(damage);
+                }
+            }
+            if (col.CompareTag("Barrel"))
+            {
+                Debug.Log(col.name);
+                Barrel Barrel = col.GetComponent<Barrel>();
+                if (Barrel != null)
+                {
+                    Damage damage = new Damage
+                    {
+                        Value = _explosionDamage,
+                        From = this.gameObject,
+                        Type = DamageType.Bomb
+                    };
+                    Barrel.TakeDamage(damage);
                 }
             }
         }
