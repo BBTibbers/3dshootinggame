@@ -7,10 +7,10 @@ public class Barrel : MonoBehaviour
     [SerializeField] private float _upwardsModifier = 0f;   // 위로 밀어내는 힘
     [SerializeField] private int _explosionDamage = 110; // 폭발 피해량
     [SerializeField] private float _explsionPositionPreset = 3;
-    [SerializeField] private float _explosionTouque = 10f; // 폭발 회전력
-
-    public int Health = 200;
+    [SerializeField] private float _explosionTouque = 10f; // 폭발 회전
     [SerializeField] private GameObject _vfx;
+    public int Health = 200;
+
     public void TakeDamage(Damage damage)
     {
         if(Health>0)

@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _recoilY = 0.5f;
     public GameObject Cam1;
     public GameObject Cam2;
+    public GameObject Cam3;
     private float _rotationX;
     private float _rotationY;
     private float _currentRecoilY = 0f;
@@ -20,11 +21,19 @@ public class CameraController : MonoBehaviour
         {
             Cam1.SetActive(true);
             Cam2.SetActive(false);
+            Cam3.SetActive(false);
         }
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             Cam1.SetActive(false);
             Cam2.SetActive(true);
+            Cam3.SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            Cam1.SetActive(false);
+            Cam2.SetActive(false);
+            Cam3.SetActive(true);
         }
     }
     private void Awake()
@@ -63,6 +72,8 @@ public class CameraController : MonoBehaviour
     }
     private void Recoil()
     {
+        if (GetActiveCamera() == Cam3)
+            return;
         _currentRecoilY -= maxRecoil * Time.deltaTime / fixRecoilTime;
         _currentRecoilY = Mathf.Max(_currentRecoilY, 0);
     }
