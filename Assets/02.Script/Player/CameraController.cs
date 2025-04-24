@@ -38,8 +38,16 @@ public class CameraController : MonoBehaviour
     void Update()
     {
 
-        Cursor.lockState = CursorLockMode.Locked;  // 마우스를 화면 중앙에 고정
-        Cursor.visible = false;                    // 커서를 보이지 않게
+        if (!Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }                  
         Recoil();
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -58,4 +66,18 @@ public class CameraController : MonoBehaviour
         _currentRecoilY -= maxRecoil * Time.deltaTime / fixRecoilTime;
         _currentRecoilY = Mathf.Max(_currentRecoilY, 0);
     }
+
+    public Camera GetActiveCamera()
+    {
+        Camera[] allCameras = Camera.allCameras;
+        foreach (Camera cam in allCameras)
+        {
+            if (cam.enabled && cam.gameObject.activeInHierarchy && cam.CompareTag("MainCamera"))
+            {
+                return cam;
+            }
+        }
+        return null;
+    }
+
 }

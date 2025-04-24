@@ -70,7 +70,8 @@ public class PlayerFire : MonoBehaviour
             //fireVFX.transform.position = FirePosition.transform.position;
             //fireVFX.GetComponent<ParticleSystem>().Play();
             //Destroy(fireVFX,_fireCooltime);
-            Ray ray = new Ray(Player.transform.position, Player.transform.forward);
+            Camera camera = CameraController.Instance.GetActiveCamera();
+            Ray ray = new Ray(camera.transform.position, camera.transform.forward);
             RaycastHit hitInfo = new RaycastHit();
             bool isHit = Physics.Raycast(ray, out hitInfo);
             if (isHit)
@@ -92,6 +93,19 @@ public class PlayerFire : MonoBehaviour
                         damage.From = this.gameObject;
                         damage.Type = DamageType.Bullet;
                         enemy.TakeDamage(damage);
+                    }
+                }
+                if(hitInfo.collider.CompareTag("Barrel"))
+                {
+                    Debug.Log("Hit Barrel");
+                    Barrel barrel = hitInfo.collider.GetComponent<Barrel>();
+                    if (barrel != null)
+                    {
+                        Damage damage = new Damage();
+                        damage.Value = 10;
+                        damage.From = this.gameObject;
+                        damage.Type = DamageType.Bullet;
+                        barrel.TakeDamage(damage);
                     }
                 }
             }

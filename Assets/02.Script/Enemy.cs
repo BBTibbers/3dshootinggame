@@ -3,8 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEngine.EventSystems.EventTrigger;
 
+public enum EnemyType
+{
+    Normal,
+    AlwaysChase,
+}
 public enum EnemyState
 {
     Idle,
@@ -20,6 +26,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _damagedTime = 0.3f;
     [SerializeField] private float _deathTime = 2f;
     [SerializeField] private float _patrolCoolTime = 3f;
+    public EnemyType EnemyType = EnemyType.Normal;
     public EnemyState CurrentState = EnemyState.Idle;
     public float MoveSpeed = 5f;
     public float FindDistance = 10f;
@@ -36,10 +43,13 @@ public class Enemy : MonoBehaviour
     private float _knockBackSpeed;
     private GameObject _player;
     private CharacterController _characterController;
+    private NavMeshAgent _navMeshAgent;
     private Coroutine _idleCoroutine = null;
 
     private void Start()
     {
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.speed = MoveSpeed;
         _player = GameObject.FindGameObjectWithTag("Player");
         _characterController = GetComponent<CharacterController>();
         CurrentPatrol = EnemyGenerator.Instance.Spawners[0];
@@ -85,9 +95,22 @@ public class Enemy : MonoBehaviour
     public void Initialize()
     {
         CurrentPatrol = EnemyGenerator.Instance.CurrentSpawner;
-        transform.position = CurrentPatrol.transform.position;
-        CurrentState = EnemyState.Idle;
+        transform.position = new Vector3(CurrentPatrol.transform.position.x + UnityEngine.Random.Range(-3f, 3f),
+            CurrentPatrol.transform.position.y, CurrentPatrol.transform.position.z + UnityEngine.Random.Range(-3f, 3f));
+        CurrentState = EnemyState.Return;
         Health = MaxHealth;
+
+        float randomValue = UnityEngine.Random.Range(0f, 1f);
+        if (randomValue < 0.5f)
+        {
+            EnemyType = EnemyType.Normal;
+            FindDistance = 10f;
+        }
+        else
+        {
+            EnemyType = EnemyType.AlwaysChase;
+            FindDistance = float.PositiveInfinity;
+        }
     }
 
     public void TakeDamage(Damage damage)
@@ -123,12 +146,16 @@ public class Enemy : MonoBehaviour
     }
     private IEnumerator Damaged_Coroutine()
     {
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
         yield return new WaitForSeconds(_damagedTime);
         Debug.Log("상태전환: Damaged -> Trace");
         CurrentState = EnemyState.Trace;
     }
     private IEnumerator Die_Coroutine()
     {
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
         yield return new WaitForSeconds(_deathTime);
         EnemyGenerator.Instance.ReturnEnemy(gameObject);
     }
@@ -186,7 +213,8 @@ public class Enemy : MonoBehaviour
          Vector3 dir = _player.transform.position - transform.position;
         dir.y = 0f; // y축 고정
         dir.Normalize();
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _navMeshAgent.SetDestination(_player.transform.position);
     }
     private void Return()
     {
@@ -207,11 +235,14 @@ public class Enemy : MonoBehaviour
         Vector3 dir = CurrentPatrol.transform.position - transform.position;
         dir.y = 0f; // y축 고정
         dir.Normalize();
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _navMeshAgent.SetDestination(CurrentPatrol.transform.position);
 
     }
     private void Attack()
     {
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
         if (Vector3.Distance(_player.transform.position, transform.position) > AttackDistance)
         {
             Debug.Log("Attack -> Trace");
