@@ -39,10 +39,23 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Player.Instance.GetComponent<PlayerFire>().OneShot += () =>
+        GameObject[] guns = GameObject.FindGameObjectsWithTag("Gun");
+
+        foreach (GameObject gun in guns)
         {
-            _currentRecoilY = Mathf.Min(_currentRecoilY + _recoilY *(maxRecoil-_currentRecoilY)/maxRecoil, maxRecoil);
-        };
+            PlayerFire fire = gun.GetComponent<PlayerFire>();
+            if (fire != null)
+            {
+                fire.OneShot += () =>
+                {
+                    _currentRecoilY = Mathf.Min(
+                        _currentRecoilY + _recoilY * (maxRecoil - _currentRecoilY) / maxRecoil,
+                        maxRecoil
+                    );
+                };
+            }
+        }
+
     }
     void Update()
     {

@@ -23,14 +23,24 @@ public class PlayerUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-    private void Start()
-    {
-        Player.Instance.GetComponent<PlayerFire>().BombCountChange += ShowBombs;
-        Player.Instance.GetComponent<PlayerFire>().BulletCountChange += ShowBullets;
+        GameObject[] guns = GameObject.FindGameObjectsWithTag("Gun");
+
+        foreach (GameObject gun in guns)
+        {
+            PlayerFire fire = gun.GetComponent<PlayerFire>();
+            if (fire != null)
+            {
+                fire.BombCountChange += ShowBombs;
+                fire.BulletCountChange += ShowBullets;
+            }
+        }
         Player.Instance.GetComponent<PlayerMove>().SteminaChanged += ShowStemina;
         Player.Instance.GetComponent<Player>().PlayerHealthChanged += ChangedPlayerHealth;
         ChangedPlayerHealth();
+    }
+    private void Start()
+    {
+
     }
 
     private void ShowBombs(int remain, int max)
