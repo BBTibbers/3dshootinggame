@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     private Coroutine _idleCoroutine = null;
 
-    private void Start()
+    private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = MoveSpeed;
@@ -94,9 +94,11 @@ public class Enemy : MonoBehaviour
 
     public void Initialize()
     {
+        _navMeshAgent.ResetPath();
         CurrentPatrol = EnemyGenerator.Instance.CurrentSpawner;
         transform.position = new Vector3(CurrentPatrol.transform.position.x + UnityEngine.Random.Range(-3f, 3f),
-            CurrentPatrol.transform.position.y, CurrentPatrol.transform.position.z + UnityEngine.Random.Range(-3f, 3f));
+        CurrentPatrol.transform.position.y, CurrentPatrol.transform.position.z + UnityEngine.Random.Range(-3f, 3f));
+
         CurrentState = EnemyState.Return;
         Health = MaxHealth;
 
