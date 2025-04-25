@@ -21,7 +21,7 @@ public enum EnemyState
     Dead,
 }
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _damagedTime = 0.3f;
     [SerializeField] private float _deathTime = 2f;
@@ -94,10 +94,11 @@ public class Enemy : MonoBehaviour
 
     public void Initialize()
     {
+        _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
         CurrentPatrol = EnemyGenerator.Instance.CurrentSpawner;
-        transform.position = new Vector3(CurrentPatrol.transform.position.x + UnityEngine.Random.Range(-3f, 3f),
-        CurrentPatrol.transform.position.y, CurrentPatrol.transform.position.z + UnityEngine.Random.Range(-3f, 3f));
+        transform.position = new Vector3(CurrentPatrol.transform.position.x + UnityEngine.Random.Range(-1f, 1f),
+        CurrentPatrol.transform.position.y, CurrentPatrol.transform.position.z + UnityEngine.Random.Range(-1f, 1f));
 
         CurrentState = EnemyState.Return;
         Health = MaxHealth;
@@ -258,6 +259,8 @@ public class Enemy : MonoBehaviour
             _attackTimer = 0f;
             Debug.Log("공격!");
             // 공격 로직 추가
+            _player.GetComponent<Player>().TakeDamage(new Damage { Value = 10, Type = DamageType.Enemy, From = gameObject });
+
         }
     }
     private void Damaged()

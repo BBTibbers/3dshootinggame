@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using UnityEditor.PackageManager;
+using UnityEngine;
 
-public class Barrel : MonoBehaviour
+public class Barrel : MonoBehaviour , IDamageable
 {
     [SerializeField] private float _explosionForce = 5f;  // 폭발 강도
     [SerializeField] private float _explosionRadius = 5f;   // 폭발 반경
     [SerializeField] private float _upwardsModifier = 0f;   // 위로 밀어내는 힘
     [SerializeField] private int _explosionDamage = 110; // 폭발 피해량
-    [SerializeField] private float _explsionPositionPreset = 3;
+    [SerializeField] private float _explsionPositionPreset = 2;
     [SerializeField] private float _explosionTouque = 10f; // 폭발 회전
     [SerializeField] private GameObject _vfx;
     private bool _isExploded = false; // 폭발 여부 
@@ -39,7 +40,7 @@ public class Barrel : MonoBehaviour
             explosionPosition.y += Random.Range(-_explsionPositionPreset, _explsionPositionPreset);
             // 자기 자신을 날리기 위한 폭발 힘 적용
             rb.AddExplosionForce(_explosionForce, transform.position, _explosionRadius, _upwardsModifier, ForceMode.Impulse);
-            rb.AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * _explosionTouque, ForceMode.Impulse); // 회전 추가
+            rb.AddTorque(new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * _explosionTouque, ForceMode.Impulse); // 회전 추가
             Debug.Log("Barrel Exploded");
         }
 
@@ -56,51 +57,14 @@ public class Barrel : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(center, _explosionRadius);
         foreach (Collider col in hitColliders)
         {
-            if (col.CompareTag("Enemy"))
+            IDamageable damageable = col.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                Debug.Log("Barrel Hit Enemy");
-
-                Enemy enemy = col.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                    Damage damage = new Damage
-                    {
-                        Value = _explosionDamage,
-                        From = this.gameObject,
-                        Type = DamageType.Bomb
-                    };
-                    enemy.TakeDamage(damage);
-                }
-            }
-            if(col.CompareTag("Player"))
-            {
-                Debug.Log(col.name);
-                Player player = col.GetComponent<Player>();
-                if (player != null)
-                {
-                    Damage damage = new Damage
-                    {
-                        Value = _explosionDamage,
-                        From = this.gameObject,
-                        Type = DamageType.Bomb
-                    };
-                    player.TakeDamage(damage);
-                }
-            }
-            if (col.CompareTag("Barrel"))
-            {
-                Debug.Log(col.name);
-                Barrel Barrel = col.GetComponent<Barrel>();
-                if (Barrel != null)
-                {
-                    Damage damage = new Damage
-                    {
-                        Value = _explosionDamage,
-                        From = this.gameObject,
-                        Type = DamageType.Bomb
-                    };
-                    Barrel.TakeDamage(damage);
-                }
+                Damage damage = new Damage();
+                damage.Value = _explosionDamage;
+                damage.From = this.gameObject;
+                damage.Type = DamageType.Barrel;
+                damageable.TakeDamage(damage);
             }
         }
     }

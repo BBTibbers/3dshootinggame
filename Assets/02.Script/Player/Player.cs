@@ -1,7 +1,7 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
 
     public float Stemina;
@@ -14,6 +14,6 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(Damage damage)
     {
-        Debug.Log("Player Hitted");
+        PlayerUI.Instance.ShowBloodScreen();
     }
 }

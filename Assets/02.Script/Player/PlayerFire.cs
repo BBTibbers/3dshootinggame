@@ -15,6 +15,7 @@ public class PlayerFire : MonoBehaviour
     [SerializeField] private float _reloadingTime = 2f;
     [SerializeField] private LineRenderer tracerLine;
     [SerializeField] private float tracerDuration = 0.01f;
+    [SerializeField] private int _bulletDamage = 10;
     public GameObject FirePosition;
     public GameObject BombPrefab;
     public GameObject Player;
@@ -82,31 +83,14 @@ public class PlayerFire : MonoBehaviour
                 StartCoroutine(ShowTracer(FirePosition.transform.position, hitInfo.point));
                 Destroy(vfx, 2f);
 
-                if (hitInfo.collider.CompareTag("Enemy"))
+                IDamageable damageable = hitInfo.collider.GetComponent<IDamageable>();
+                if (damageable != null)
                 {
-                    Debug.Log("Hit Enemy");
-                    Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
-                    if (enemy != null)
-                    {
-                        Damage damage = new Damage();
-                        damage.Value = 10;
-                        damage.From = this.gameObject;
-                        damage.Type = DamageType.Bullet;
-                        enemy.TakeDamage(damage);
-                    }
-                }
-                if(hitInfo.collider.CompareTag("Barrel"))
-                {
-                    Debug.Log("Hit Barrel");
-                    Barrel barrel = hitInfo.collider.GetComponent<Barrel>();
-                    if (barrel != null)
-                    {
-                        Damage damage = new Damage();
-                        damage.Value = 10;
-                        damage.From = this.gameObject;
-                        damage.Type = DamageType.Bullet;
-                        barrel.TakeDamage(damage);
-                    }
+                    Damage damage = new Damage();
+                    damage.Value = _bulletDamage;
+                    damage.From = this.gameObject;
+                    damage.Type = DamageType.Bullet;
+                    damageable.TakeDamage(damage);
                 }
             }
             OneShot?.Invoke();
