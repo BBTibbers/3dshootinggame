@@ -16,6 +16,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider _steminaSlider;
     [SerializeField] private Image _bloodScreen;
     [SerializeField] private float BloodTime = 3;
+    [SerializeField] private Slider _playerHealthSlider;
     private Coroutine _chargeCoroutine;
     private Coroutine _bloodCoroutine;
 
@@ -28,6 +29,8 @@ public class PlayerUI : MonoBehaviour
         Player.Instance.GetComponent<PlayerFire>().BombCountChange += ShowBombs;
         Player.Instance.GetComponent<PlayerFire>().BulletCountChange += ShowBullets;
         Player.Instance.GetComponent<PlayerMove>().SteminaChanged += ShowStemina;
+        Player.Instance.GetComponent<Player>().PlayerHealthChanged += ChangedPlayerHealth;
+        ChangedPlayerHealth();
     }
 
     private void ShowBombs(int remain, int max)
@@ -66,9 +69,7 @@ public class PlayerUI : MonoBehaviour
         }
 
         // 끝에 정확히 맞춰주기
-        _bombChargeSlider.value = 1f;
-
-        _bombChargeSlider.gameObject.SetActive(false); // 슬라이더 숨기기   
+        _bombChargeSlider.value = 1f;  
     }
 
     private void ShowBullets(int remain, int max)
@@ -109,5 +110,10 @@ public class PlayerUI : MonoBehaviour
         // 마지막으로 확실히 0으로 세팅
         color.a = 0f;
         _bloodScreen.color = color;
+    }
+
+    public void ChangedPlayerHealth()
+    {
+        _playerHealthSlider.value = Player.Instance.Health / Player.Instance.PlayerSO.HealthMax;
     }
 }

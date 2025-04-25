@@ -1,10 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public enum EnemyType
 {
@@ -45,6 +42,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private CharacterController _characterController;
     private NavMeshAgent _navMeshAgent;
     private Coroutine _idleCoroutine = null;
+    public Action EnemyHealthChnaged;
 
     private void Awake()
     {
@@ -57,7 +55,10 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        switch(CurrentState)
+        if (CurrentState == EnemyState.Dead)
+            return;
+
+        switch (CurrentState)
         {
             case EnemyState.Idle:
             {
@@ -102,6 +103,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         CurrentState = EnemyState.Return;
         Health = MaxHealth;
+        EnemyHealthChnaged?.Invoke();
 
         float randomValue = UnityEngine.Random.Range(0f, 1f);
         if (randomValue < 0.5f)
@@ -124,6 +126,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
 
         Health -= damage.Value;
+        EnemyHealthChnaged?.Invoke();
         Debug.Log("피격! 남은 체력: " + Health);
         if (damage.Type == DamageType.Bullet)
         {
@@ -134,7 +137,6 @@ public class Enemy : MonoBehaviour, IDamageable
         }
         if (Health <= 0)
         {
-            CurrentState = EnemyState.Dead;
             Debug.Log($"상태전환: {CurrentState} -> Die");
             CurrentState = EnemyState.Dead;
             StartCoroutine(Die_Coroutine());
@@ -153,7 +155,8 @@ public class Enemy : MonoBehaviour, IDamageable
         _navMeshAgent.ResetPath();
         yield return new WaitForSeconds(_damagedTime);
         Debug.Log("상태전환: Damaged -> Trace");
-        CurrentState = EnemyState.Trace;
+        if (CurrentState != EnemyState.Dead)
+            CurrentState = EnemyState.Trace;
     }
     private IEnumerator Die_Coroutine()
     {
