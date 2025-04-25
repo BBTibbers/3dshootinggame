@@ -18,5 +18,10 @@ public class Player : MonoBehaviour, IDamageable
         PlayerUI.Instance.ShowBloodScreen();
         Health -= damage.Value;
         PlayerHealthChanged?.Invoke();
+
+        if(Health <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 }
