@@ -344,6 +344,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &204298480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6455680517095611053, guid: 69feb8bf53e05f34a8509a2d2e904f3f, type: 3}
+  m_PrefabInstance: {fileID: 2054373828}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &213860511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1666,6 +1671,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5792176263618682287, guid: 69feb8bf53e05f34a8509a2d2e904f3f, type: 3}
   m_PrefabInstance: {fileID: 2054373828}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &773693331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204298480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88e901e26e98cdd498eca5cf6a7f0d79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackRange: 3
+  _attackAngle: 120
+  _swordDamage: 20
+  _swordPosition: {fileID: 2097997542}
+  _sowrdCooltime: 1
 --- !u!1 &820477102
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,6 +4384,7 @@ GameObject:
   - component: {fileID: 1868737520}
   - component: {fileID: 1868737521}
   - component: {fileID: 1868737522}
+  - component: {fileID: 1868737523}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -4442,6 +4465,7 @@ Transform:
   - {fileID: 267702634}
   - {fileID: 1893318918}
   - {fileID: 773693330}
+  - {fileID: 2097997543}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1868737517
@@ -4545,6 +4569,20 @@ MonoBehaviour:
   Player: {fileID: 1868737512}
   BulletEffect: {fileID: 100002, guid: 54dd9cb5740188a488b8baebbf19207c, type: 3}
   FireEffect: {fileID: 100000, guid: 8eaaa4f553116f44b8459bc24201c514, type: 3}
+--- !u!114 &1868737523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868737512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111070275ea46dd4a9fc288f0f1fc371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weapon1: {fileID: 64154252}
+  Weapon2: {fileID: 204298480}
 --- !u!1 &1893318917
 GameObject:
   m_ObjectHideFlags: 0
@@ -5336,8 +5374,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6455680517095611053, guid: 69feb8bf53e05f34a8509a2d2e904f3f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 773693331}
   m_SourcePrefab: {fileID: 100100000, guid: 69feb8bf53e05f34a8509a2d2e904f3f, type: 3}
+--- !u!1 &2097997542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097997543}
+  m_Layer: 3
+  m_Name: SwordPostion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2097997543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097997542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868737516}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6977186184499736004
 PrefabInstance:
   m_ObjectHideFlags: 0

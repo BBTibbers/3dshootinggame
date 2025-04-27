@@ -20,7 +20,7 @@ public class PlayerUI : MonoBehaviour
     private Coroutine _chargeCoroutine;
     private Coroutine _bloodCoroutine;
 
-    private void Awake()
+    private void Start()
     {
         Instance = this;
         GameObject[] guns = GameObject.FindGameObjectsWithTag("Gun");
@@ -37,10 +37,6 @@ public class PlayerUI : MonoBehaviour
         Player.Instance.GetComponent<PlayerMove>().SteminaChanged += ShowStemina;
         Player.Instance.GetComponent<Player>().PlayerHealthChanged += ChangedPlayerHealth;
         ChangedPlayerHealth();
-    }
-    private void Start()
-    {
-
     }
 
     private void ShowBombs(int remain, int max)

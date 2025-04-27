@@ -6,6 +6,7 @@ public enum DamageType
     Bomb,
     Barrel,
     Enemy,
+    Sword,
 }
 
 public class Damage

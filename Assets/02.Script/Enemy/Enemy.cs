@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public float MinDistance = 0.2f;
     public float BulletKnockBackSpeed = 1f;
     public float BombKnockBackSpeed = 10f;
+    public float SwordKnockBackSpeed = 1f;
     public int Health = 100;
     public int MaxHealth = 100;
     public int patrolIndex = 0;
@@ -134,6 +135,10 @@ public class Enemy : MonoBehaviour, IDamageable
         }else if(damage.Type == DamageType.Bomb)
         {
             _knockBackSpeed = BombKnockBackSpeed;
+        }
+        else if (damage.Type == DamageType.Sword)
+        {
+            _knockBackSpeed = SwordKnockBackSpeed;
         }
         if (Health <= 0)
         {
