@@ -1,9 +1,9 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 public class PlayerSword : MonoBehaviour
 {
     [SerializeField] private float _attackRange = 1f;
-    [SerializeField] private float _attackAngle = 60f; // ∫Œ√§≤√ ∞¢µµ
+    [SerializeField] private float _attackAngle = 60f; // Î∂ÄÏ±ÑÍº¥ Í∞ÅÎèÑ
     [SerializeField] private int _swordDamage = 20;
     [SerializeField] private GameObject _swordPosition;
     [SerializeField] private float _sowrdCooltime = 1f;
@@ -32,13 +32,12 @@ public class PlayerSword : MonoBehaviour
         {
             _attacking = true;
             _nextSwordtime = Time.time+_sowrdCooltime;
-            Debug.Log("SwordAttaCK");
 
             Collider[] hitEnemies = Physics.OverlapSphere(_swordPosition.transform.position, _attackRange);
 
             foreach (Collider col in hitEnemies)
             {
-                Vector3 dirToTarget = (col.transform.position - _swordPosition.transform.position).normalized;
+                Vector3 dirToTarget = (col.ClosestPoint(_swordPosition.transform.position) - _swordPosition.transform.position).normalized;
                 float angle = Vector3.Angle(transform.forward, dirToTarget);
                 //angle < _attackAngle * 0.5f
                 if (angle < _attackAngle * 0.5f)
@@ -51,7 +50,6 @@ public class PlayerSword : MonoBehaviour
                         damage.From = this.gameObject;
                         damage.Type = DamageType.Sword;
                         damageable.TakeDamage(damage);
-                        Debug.Log("SwordDamage");
                     }
                 }
             }

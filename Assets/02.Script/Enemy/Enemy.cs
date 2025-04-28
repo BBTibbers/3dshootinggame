@@ -36,7 +36,8 @@ public class Enemy : MonoBehaviour, IDamageable
     public int MaxHealth = 100;
     public int patrolIndex = 0;
     public GameObject CurrentPatrol;
-    private float _attackCoolTime = 1f;
+    [SerializeField]
+    private float _attackCoolTime = 2f;
     private float _attackTimer = 0f;
     private float _knockBackSpeed;
     private GameObject _player;
@@ -44,6 +45,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private NavMeshAgent _navMeshAgent;
     private Coroutine _idleCoroutine = null;
     public Action EnemyHealthChnaged;
+    private Animator _animator;
 
     private void Awake()
     {
@@ -52,6 +54,7 @@ public class Enemy : MonoBehaviour, IDamageable
         _player = GameObject.FindGameObjectWithTag("Player");
         _characterController = GetComponent<CharacterController>();
         CurrentPatrol = EnemyGenerator.Instance.Spawners[0];
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -152,6 +155,8 @@ public class Enemy : MonoBehaviour, IDamageable
         Debug.Log($"상태전환: {CurrentState} -> Damaged");
 
         CurrentState = EnemyState.Damaged;
+        _animator.ResetTrigger("Hitted");
+        _animator.SetTrigger("hitted");
         StartCoroutine(Damaged_Coroutine());
     }
     private IEnumerator Damaged_Coroutine()
@@ -187,6 +192,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
         if (_idleCoroutine == null)
         {
+            _animator.SetTrigger("idle");
             _idleCoroutine = StartCoroutine(CallChangeSpawner());
         }
     }
@@ -221,6 +227,7 @@ public class Enemy : MonoBehaviour, IDamageable
             CurrentState = EnemyState.Attack;
             return;
         }
+        _animator.SetTrigger("walk");
          Vector3 dir = _player.transform.position - transform.position;
         dir.y = 0f; // y축 고정
         dir.Normalize();
@@ -243,6 +250,7 @@ public class Enemy : MonoBehaviour, IDamageable
             return;
         }
 
+        _animator.SetTrigger("walk");
         Vector3 dir = CurrentPatrol.transform.position - transform.position;
         dir.y = 0f; // y축 고정
         dir.Normalize();
@@ -250,7 +258,7 @@ public class Enemy : MonoBehaviour, IDamageable
         _navMeshAgent.SetDestination(CurrentPatrol.transform.position);
 
     }
-    private void Attack()
+    public void Attack()
     {
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
@@ -260,16 +268,18 @@ public class Enemy : MonoBehaviour, IDamageable
             CurrentState = EnemyState.Trace;
             return;
         }
-
+        _animator.SetTrigger("attackDelay");
         _attackTimer += Time.deltaTime;
         if (_attackTimer > _attackCoolTime)
         {
+            _animator.SetTrigger("attack");
             _attackTimer = 0f;
-            Debug.Log("공격!");
-            // 공격 로직 추가
-            _player.GetComponent<Player>().TakeDamage(new Damage { Value = 10, Type = DamageType.Enemy, From = gameObject });
-
         }
+    }
+    public void Hit()
+    {
+        // 공격 로직 추가
+        _player.GetComponent<Player>().TakeDamage(new Damage { Value = 10, Type = DamageType.Enemy, From = gameObject });
     }
     private void Damaged()
     {
