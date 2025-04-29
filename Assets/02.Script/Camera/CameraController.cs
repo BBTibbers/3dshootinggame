@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float fixRecoilTime = 2f;
     [SerializeField] private float maxRecoil = 2f;
-    [SerializeField] private float _rotationSpeed = 1250f;
+    public float RotationSpeed = 1000f;
     [SerializeField] private float _recoilY = 0.5f;
     public GameObject Cam1;
     public GameObject Cam2;
@@ -74,8 +74,8 @@ public class CameraController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        _rotationX += mouseX * _rotationSpeed * Time.deltaTime;
-        _rotationY -= mouseY * _rotationSpeed * Time.deltaTime;
+        _rotationX += mouseX * RotationSpeed * Time.deltaTime;
+        _rotationY -= mouseY * RotationSpeed * Time.deltaTime;
   
 
         _rotationY = Mathf.Clamp(_rotationY, -90f, 90f);

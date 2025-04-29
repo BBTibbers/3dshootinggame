@@ -6,10 +6,6 @@ using UnityEngine.VFX;
 public class PlayerFire : MonoBehaviour
 {
 
-    [SerializeField] private float _throwPower = 15;
-    [SerializeField] private int _bombCount = 3;
-    [SerializeField] private int _maxBombCount = 3;
-    [SerializeField] private float _maxChargeTime = 3f;
     [SerializeField] private float _fireCooltime = 0.1f;
     [SerializeField] private int _maxBullets = 50;
     [SerializeField] private float _reloadingTime = 2f;
@@ -21,31 +17,52 @@ public class PlayerFire : MonoBehaviour
     public GameObject Player;
     public GameObject BulletEffect;
     public GameObject FireEffect;
-    public Action<int, int> BombCountChange;
     public Action<int, int> BulletCountChange;
     public Action OneShot;
-    private bool _bombCharging = false;
-    private float _chargeTime;
     private float _nextFire = 0;
     private int _remainBullets = 50;
     private bool _reloading = false;
     private float _nextReloadingTime = 0;
+    public GameObject UI_CrossHair;
+    public GameObject UI_SniperZoom;
+    private bool _zoomMode = false;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        BombCountChange?.Invoke(_bombCount, _maxBombCount);
         BulletCountChange?.Invoke(_remainBullets, _maxBullets);
     }
     private void Update()
     {
-        ThrowBomb();
         Fire();
         if (Input.GetKeyDown(KeyCode.R))
         {
             _reloading = true;
         }
         ReLoad();
+        Zoom();
+    }
+
+    private void Zoom()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            _zoomMode = !_zoomMode;
+            UI_CrossHair.SetActive(!_zoomMode);
+            UI_SniperZoom.SetActive(_zoomMode);
+            if (_zoomMode)
+            {
+                Camera camera = CameraController.Instance.GetActiveCamera();
+                camera.fieldOfView = 10f;
+                CameraController.Instance.RotationSpeed *= 0.1f;
+            }
+            else
+            {
+                Camera camera = CameraController.Instance.GetActiveCamera();
+                camera.fieldOfView = 60f;
+                CameraController.Instance.RotationSpeed *= 10f;
+            }
+        }
     }
 
     private void Fire()
@@ -126,35 +143,6 @@ public class PlayerFire : MonoBehaviour
         BulletCountChange?.Invoke(_remainBullets, _maxBullets);
     }
 
-
-    private void ThrowBomb()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (_bombCount <= 0)
-            {
-                return;
-            }
-            _bombCharging = true;
-            _chargeTime = Time.time;
-            PlayerUI.Instance.BombChargeShow(_maxChargeTime);
-        }
-        if (Input.GetMouseButtonUp(1) && _bombCharging)
-        {
-            PlayerUI.Instance.BombChargeHide();
-            _bombCount--;
-            BombCountChange?.Invoke(_bombCount, _maxBombCount);
-            GameObject bomb = BombPool.Instance.GetBomb();
-            bomb.transform.position = Player.transform.position;
-
-            Rigidbody bombRIgidbody = bomb.GetComponent<Rigidbody>();
-            float charged = Mathf.Min(Time.time - _chargeTime, _maxChargeTime);
-            bombRIgidbody.AddForce(Player.transform.forward.normalized * _throwPower * charged, ForceMode.Impulse);
-            bombRIgidbody.AddTorque(Vector3.one);
-
-            _bombCharging = false;
-        }
-    }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

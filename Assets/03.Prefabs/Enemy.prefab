@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damagedTime: 0.3
-  _deathTime: 2
+  _deathTime: 3
   _patrolCoolTime: 3
   EnemyType: 0
   CurrentState: 2

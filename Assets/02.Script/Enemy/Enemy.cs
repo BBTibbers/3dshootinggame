@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private Coroutine _idleCoroutine = null;
     public Action EnemyHealthChnaged;
     private Animator _animator;
+    private Coroutine _damagedCoroutine = null;
 
     private void Awake()
     {
@@ -143,35 +144,47 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             _knockBackSpeed = SwordKnockBackSpeed;
         }
-        if (Health <= 0)
-        {
-            Debug.Log($"상태전환: {CurrentState} -> Die");
-            CurrentState = EnemyState.Dead;
-            StartCoroutine(Die_Coroutine());
-            return;
-        }
-
-
         Debug.Log($"상태전환: {CurrentState} -> Damaged");
 
         CurrentState = EnemyState.Damaged;
         _animator.ResetTrigger("Hitted");
         _animator.SetTrigger("hitted");
-        StartCoroutine(Damaged_Coroutine());
+        if (Health > 0)
+        {
+            if (_damagedCoroutine != null)
+            {
+                StopCoroutine(_damagedCoroutine);
+            }
+            _damagedCoroutine = StartCoroutine(Damaged_Coroutine());
+        }
+        else if (Health <= 0)
+        {
+            Debug.Log($"상태전환: {CurrentState} -> Die");
+            CurrentState = EnemyState.Dead;
+            _animator.SetTrigger("dead");
+            StartCoroutine(Die_Coroutine());
+        }
     }
     private IEnumerator Damaged_Coroutine()
     {
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
         yield return new WaitForSeconds(_damagedTime);
-        Debug.Log("상태전환: Damaged -> Trace");
         if (CurrentState != EnemyState.Dead)
+        {
             CurrentState = EnemyState.Trace;
+            Debug.Log("상태전환: Damaged -> Trace");
+        }
+        _damagedCoroutine = null;
     }
     private IEnumerator Die_Coroutine()
     {
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
+        if (_damagedCoroutine != null)
+        {
+            StopCoroutine(_damagedCoroutine);
+        }
         yield return new WaitForSeconds(_deathTime);
         EnemyGenerator.Instance.ReturnEnemy(gameObject);
     }
@@ -190,9 +203,10 @@ public class Enemy : MonoBehaviour, IDamageable
             CurrentState = EnemyState.Return;
             return;
         }
+        _animator.SetTrigger("idle");
         if (_idleCoroutine == null)
         {
-            _animator.SetTrigger("idle");
+            Debug.Log("SetIdle");
             _idleCoroutine = StartCoroutine(CallChangeSpawner());
         }
     }

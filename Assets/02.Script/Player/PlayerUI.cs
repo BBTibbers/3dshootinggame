@@ -17,6 +17,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image _bloodScreen;
     [SerializeField] private float BloodTime = 3;
     [SerializeField] private Slider _playerHealthSlider;
+    [SerializeField] private Cannon _cannon;
     private Coroutine _chargeCoroutine;
     private Coroutine _bloodCoroutine;
 
@@ -30,10 +31,11 @@ public class PlayerUI : MonoBehaviour
             PlayerFire fire = gun.GetComponent<PlayerFire>();
             if (fire != null)
             {
-                fire.BombCountChange += ShowBombs;
                 fire.BulletCountChange += ShowBullets;
             }
         }
+        
+        _cannon.BombCountChange += ShowBombs;
         Player.Instance.GetComponent<PlayerMove>().SteminaChanged += ShowStemina;
         Player.Instance.GetComponent<Player>().PlayerHealthChanged += ChangedPlayerHealth;
         ChangedPlayerHealth();
