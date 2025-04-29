@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class WFX_Demo_DeleteAfterDelay : MonoBehaviour
@@ -9,6 +9,6 @@ public class WFX_Demo_DeleteAfterDelay : MonoBehaviour
 	{
 		delay -= Time.deltaTime;
 		if(delay < 0f)
-			GameObject.Destroy(this.gameObject);
-	}
+			GetComponent<ParticleSystem>().Stop();
+    }
 }

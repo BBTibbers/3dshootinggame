@@ -12,6 +12,7 @@ public class PlayerFire : MonoBehaviour
     [SerializeField] private LineRenderer tracerLine;
     [SerializeField] private float tracerDuration = 0.01f;
     [SerializeField] private int _bulletDamage = 10;
+    [SerializeField] private ParticleSystem muzzleFlash;
     public GameObject FirePosition;
     public GameObject BombPrefab;
     public GameObject Player;
@@ -31,6 +32,8 @@ public class PlayerFire : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         BulletCountChange?.Invoke(_remainBullets, _maxBullets);
+        muzzleFlash.Stop(); // (재생 중이라도 강제로 끊고)
+
     }
     private void Update()
     {
@@ -67,6 +70,14 @@ public class PlayerFire : MonoBehaviour
 
     private void Fire()
     {
+        if (muzzleFlash == null)
+        {
+            Debug.LogError("muzzleFlash 레퍼런스가 null이다! (오브젝트가 사라졌거나 연결이 끊겼음)");
+        }
+        else
+        {
+            Debug.Log("muzzleFlash는 살아있음");
+        }
         if (Input.GetMouseButtonDown(0))
             _reloading = false;
         if (Input.GetMouseButton(0))
@@ -88,6 +99,7 @@ public class PlayerFire : MonoBehaviour
             //fireVFX.transform.position = FirePosition.transform.position;
             //fireVFX.GetComponent<ParticleSystem>().Play();
             //Destroy(fireVFX,_fireCooltime);
+            muzzleFlash.Play(); // 새로 한 번 재생
             Camera camera = CameraController.Instance.GetActiveCamera();
             Ray ray = new Ray(camera.transform.position, camera.transform.forward);
             RaycastHit hitInfo = new RaycastHit();
