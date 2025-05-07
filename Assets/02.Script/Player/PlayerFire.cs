@@ -70,14 +70,6 @@ public class PlayerFire : MonoBehaviour
 
     private void Fire()
     {
-        if (muzzleFlash == null)
-        {
-            Debug.LogError("muzzleFlash 레퍼런스가 null이다! (오브젝트가 사라졌거나 연결이 끊겼음)");
-        }
-        else
-        {
-            Debug.Log("muzzleFlash는 살아있음");
-        }
         if (Input.GetMouseButtonDown(0))
             _reloading = false;
         if (Input.GetMouseButton(0))
