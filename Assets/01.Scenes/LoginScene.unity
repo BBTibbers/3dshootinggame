@@ -982,13 +982,15 @@ MonoBehaviour:
   LoginInputField:
     IDInputField: {fileID: 1332926878}
     PasswordInputField: {fileID: 2094160310}
-    PasswordConfirmField: {fileID: 0}
+    PasswordConfirmField: {fileID: 2094160310}
     OutputText: {fileID: 1697333296}
+    ConfirmButton: {fileID: 605081675}
   RegisterInputField:
     IDInputField: {fileID: 1982508651}
     PasswordInputField: {fileID: 2123269922}
     PasswordConfirmField: {fileID: 319891104}
     OutputText: {fileID: 1677527192}
+    ConfirmButton: {fileID: 1634697419}
 --- !u!1 &319891102
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,7 +2343,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 605081676}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 287528919}
+        m_TargetAssemblyTypeName: UI_LoginScene, Assembly-CSharp
+        m_MethodName: Login
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &605081676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4195,7 +4209,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 287528919}
+        m_TargetAssemblyTypeName: UI_LoginScene, Assembly-CSharp
+        m_MethodName: LoginCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6090,7 +6116,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 287528919}
+        m_TargetAssemblyTypeName: UI_LoginScene, Assembly-CSharp
+        m_MethodName: LoginCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
