@@ -50,7 +50,7 @@ public class Barrel : MonoBehaviour , IDamageable
         // 바렐 객체를 파괴
         Destroy(gameObject,5f);
     }
-    void DetectEnemies()
+    private void DetectEnemies()
     {
         Vector3 center = transform.position;
 

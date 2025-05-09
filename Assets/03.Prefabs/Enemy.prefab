@@ -108,12 +108,16 @@ MonoBehaviour:
   _damagedTime: 0.3
   _deathTime: 3
   _patrolCoolTime: 3
+  _coin: {fileID: 1223147859275747655, guid: 98a49dc47c4249b4fb0f7981548cc96e, type: 3}
+  _coinAmount: 5
+  _explosionForce: 3
+  _upwardForce: 3
   EnemyType: 0
   CurrentState: 2
   MoveSpeed: 5
   FindDistance: 10
   AttackDistance: 3
-  MinDistance: 0.1
+  MinDistance: 1
   BulletKnockBackSpeed: 3
   BombKnockBackSpeed: 50
   SwordKnockBackSpeed: 10

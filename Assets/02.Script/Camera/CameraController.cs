@@ -60,7 +60,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
 
-        if (!Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
+        if (!Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt) && GameManager.Instance.CurrentState == EGameState.Run)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

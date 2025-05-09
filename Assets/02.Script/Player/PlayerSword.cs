@@ -9,6 +9,7 @@ public class PlayerSword : MonoBehaviour
     [SerializeField] private float _sowrdCooltime = 1f;
     private float _nextSwordtime = 0;
     private bool _attacking = false;
+    [SerializeField] private GameObject _swordEffectPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,6 +34,14 @@ public class PlayerSword : MonoBehaviour
             _attacking = true;
             _nextSwordtime = Time.time+_sowrdCooltime;
 
+            Quaternion baseRotation = Quaternion.LookRotation(-_swordPosition.transform.forward);
+            Quaternion finalRotation = baseRotation * Quaternion.Euler(45f, 0f, 135f); // ← Z축 회전 추가
+
+            GameObject vfx = Instantiate(_swordEffectPrefab, _swordPosition.transform.position, finalRotation);
+            vfx.transform.localScale *= 1f; // 또는 new Vector3(2f, 2f, 2f);
+
+            Destroy(vfx, 1f);
+            
             Collider[] hitEnemies = Physics.OverlapSphere(_swordPosition.transform.position, _attackRange);
 
             foreach (Collider col in hitEnemies)

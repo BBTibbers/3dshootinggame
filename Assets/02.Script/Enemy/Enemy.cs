@@ -23,12 +23,16 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private float _damagedTime = 0.3f;
     [SerializeField] private float _deathTime = 2f;
     [SerializeField] private float _patrolCoolTime = 3f;
+    [SerializeField] private GameObject _coin;
+    [SerializeField] private int _coinAmount = 10;
+    [SerializeField] private float _explosionForce = 1f;
+    [SerializeField] private float _upwardForce = 1f;
     public EnemyType EnemyType = EnemyType.Normal;
     public EnemyState CurrentState = EnemyState.Idle;
     public float MoveSpeed = 5f;
     public float FindDistance = 10f;
     public float AttackDistance = 2f;
-    public float MinDistance = 0.2f;
+    public float MinDistance = 1f;
     public float BulletKnockBackSpeed = 1f;
     public float BombKnockBackSpeed = 10f;
     public float SwordKnockBackSpeed = 1f;
@@ -185,10 +189,34 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             StopCoroutine(_damagedCoroutine);
         }
+        SpawnCoins();
         yield return new WaitForSeconds(_deathTime);
         EnemyGenerator.Instance.ReturnEnemy(gameObject);
     }
+    public void SpawnCoins()
+    {
+        Vector3 center = transform.position;
+        center.y = -2f; // Y축 고정
 
+        for (int i = 0; i < _coinAmount; i++)
+        {
+            float angle = i * Mathf.PI * 2f / _coinAmount; // 360도 등분 (라디안)
+            float x = Mathf.Cos(angle) * 1f;
+            float z = Mathf.Sin(angle) * 1f;
+
+            Vector3 spawnPos = center + new Vector3(x, 4f, z); // Y는 그대로
+            GameObject coin = Instantiate(_coin);
+            coin.transform.position = spawnPos;
+
+            Rigidbody rb = coin.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                // 방향 = 바깥 + 위
+                rb.AddForce((spawnPos - center).normalized * _explosionForce, ForceMode.Impulse);
+            }
+
+        }
+    }
     private void Idle()
     {
         if(Vector3.Distance(_player.transform.position, transform.position) < FindDistance)
