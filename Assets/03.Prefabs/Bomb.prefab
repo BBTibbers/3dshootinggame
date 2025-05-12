@@ -150,3 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _vfx: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  _explosionRadius: 5
+  _explosionDamage: 110
+  _crack: {fileID: 3750837428024646718, guid: 98277537a7c5c6e4aa439267999c32e0, type: 3}

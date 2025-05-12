@@ -7,6 +7,7 @@ public class Bomb : MonoBehaviour
     private GameObject _vfx;
     [SerializeField] private float _explosionRadius = 5f;   // 폭발 반경
     [SerializeField] private int _explosionDamage = 110; // 폭발 피해량
+    [SerializeField] private GameObject _crack;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -15,7 +16,12 @@ public class Bomb : MonoBehaviour
             return;
         }
         GameObject vfx = Instantiate(_vfx);
+        GameObject crack = Instantiate(_crack);
         vfx.transform.position = transform.position;
+        crack.transform.position = transform.position; crack.GetComponent<Renderer>().material
+     .DOFade(0, 5f)
+     .OnComplete(() => Destroy(crack));
+
         BombPool.Instance.ReturnBomb(this.gameObject);
 
         CameraController.Instance.GetActiveCamera().DOShakePosition(0.5f, 0.5f, 10, 90, true);

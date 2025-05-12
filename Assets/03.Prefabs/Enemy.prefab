@@ -126,6 +126,9 @@ MonoBehaviour:
   patrolIndex: 0
   CurrentPatrol: {fileID: 0}
   _attackCoolTime: 3
+  _bodyRenderer: {fileID: 7563969243495480409}
+  _headRenderer: {fileID: 8888995081411011797}
+  _blood: {fileID: 4855496220955154835, guid: 34134aedffc9073409580f29b750ca52, type: 3}
 --- !u!143 &210971491386365902
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1001,5 +1004,15 @@ MonoBehaviour:
 --- !u!4 &2858178147783040441 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 6a28a82791e0b224081a04d42d031ccf, type: 3}
+  m_PrefabInstance: {fileID: 7120469390570419875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7563969243495480409 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -8491430595766072582, guid: 6a28a82791e0b224081a04d42d031ccf, type: 3}
+  m_PrefabInstance: {fileID: 7120469390570419875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8888995081411011797 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1841111061274514038, guid: 6a28a82791e0b224081a04d42d031ccf, type: 3}
   m_PrefabInstance: {fileID: 7120469390570419875}
   m_PrefabAsset: {fileID: 0}

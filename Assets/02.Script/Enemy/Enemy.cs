@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-
+using DG.Tweening;
 public enum EnemyType
 {
     Normal,
@@ -51,7 +51,15 @@ public class Enemy : MonoBehaviour, IDamageable
     public Action EnemyHealthChnaged;
     private Animator _animator;
     private Coroutine _damagedCoroutine = null;
+    [SerializeField] private SkinnedMeshRenderer _bodyRenderer;
+    [SerializeField] private SkinnedMeshRenderer _headRenderer;
 
+    private Material _bodyMat;
+    private Material _headMat;
+    private Color _originalBodyColor;
+    private Color _originalHeadColor;
+
+    [SerializeField] GameObject _blood;
     private void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -60,6 +68,12 @@ public class Enemy : MonoBehaviour, IDamageable
         _characterController = GetComponent<CharacterController>();
         CurrentPatrol = EnemyGenerator.Instance.Spawners[0];
         _animator = GetComponentInChildren<Animator>();
+
+        _bodyMat = _bodyRenderer.material; // 인스턴스화 필요
+        _headMat = _headRenderer.material;
+
+        _originalBodyColor = _bodyMat.color;
+        _originalHeadColor = _headMat.color;
     }
 
     private void Update()
@@ -171,14 +185,23 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     private IEnumerator Damaged_Coroutine()
     {
+        GameObject blood = Instantiate(_blood);
+        blood.transform.position = new Vector3 (transform.position.x, transform.position.y - 1f, transform.position.z);
+        blood.GetComponent<Renderer>().material
+.DOFade(0, 5f)
+.OnComplete(() => Destroy(blood));
         _navMeshAgent.isStopped = true;
         _navMeshAgent.ResetPath();
+        _bodyMat.color = Color.red;
+        _headMat.color = Color.red;
         yield return new WaitForSeconds(_damagedTime);
         if (CurrentState != EnemyState.Dead)
         {
             CurrentState = EnemyState.Trace;
             Debug.Log("상태전환: Damaged -> Trace");
         }
+        _bodyMat.color = _originalBodyColor;
+        _headMat.color = _originalHeadColor;
         _damagedCoroutine = null;
     }
     private IEnumerator Die_Coroutine()
